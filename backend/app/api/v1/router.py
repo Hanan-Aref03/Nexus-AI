@@ -1,0 +1,11 @@
+"""Version 1 router composition."""
+
+from fastapi import APIRouter
+
+from app.api.v1.adapters import adapters_router
+from app.api.v1.telemetry import telemetry_router
+
+v1_router = APIRouter()
+v1_router.include_router(adapters_router)
+v1_router.include_router(telemetry_router)
+

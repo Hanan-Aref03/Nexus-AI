@@ -7,5 +7,6 @@ Design notes, runbooks, and decision records that keep the platform understandab
 - `architecture/` - diagrams and system-level design notes
 - `adr/` - architecture decision records
 - `runbooks/` - operational and incident-response playbooks
+- `phases/` - explanation docs for each roadmap phase
 
 Docs should explain the system the same way the code intends to behave.

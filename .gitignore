@@ -36,9 +36,12 @@ out/
 # Test and temp output
 tmp/
 temp/
+.tmp/
+pytest-cache-files-*/
+.tmp/pytest-cache-files-*/
+.tmp/pytest-temp/
 
 # Platform-specific
 *.sqlite
 *.sqlite3
 *.db
-
