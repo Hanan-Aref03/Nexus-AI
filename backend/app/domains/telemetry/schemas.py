@@ -92,12 +92,14 @@ class TelemetrySignalOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: str
+    tenant_id: str
     source_name: str
     source_type: TelemetrySourceType
     kind: TelemetrySignalKind
     severity: TelemetrySeverity
     summary: str
     description: str | None
+    actor_subject: str | None
     observed_at: datetime
     received_at: datetime
     batch_label: str | None
@@ -164,4 +166,3 @@ class ReadyResponse(BaseModel):
     service: str
     database: ReadyDatabaseStatus
     adapters: list[TelemetryAdapterCapability]
-

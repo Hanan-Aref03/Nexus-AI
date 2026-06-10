@@ -5,14 +5,17 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.health import health_router
 from app.api.router import api_router
 from app.core.config import Settings, get_settings
 from app.core.database import build_engine, build_session_factory, close_engine
 from app.core.middleware import OpenTelemetryMiddleware
+from app.core.guardrails import build_evaluation_engine, build_guardrail_engine
 from app.core.migrations import upgrade_database
 from app.core.telemetry import configure_telemetry
+from app.core.secrets import build_runtime_secrets
 from app.domains.telemetry.adapters import (
     AdapterRegistry,
     CloudWatchTelemetryAdapter,
@@ -45,7 +48,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         """Prepare persistence and tracing once the application starts."""
 
         app.state.settings = active_settings
+        app.state.runtime_secrets = build_runtime_secrets(active_settings)
         app.state.adapter_registry = build_adapter_registry()
+        app.state.guardrail_engine = build_guardrail_engine(active_settings.guardrails_enabled)
+        app.state.evaluation_engine = build_evaluation_engine(active_settings.ragas_enabled)
         app.state.database_ready = False
         app.state.database_error = None
 
@@ -75,6 +81,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         openapi_url="/openapi.json",
     )
 
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=active_settings.cors_allow_origins,
+        allow_credentials=False,
+        allow_methods=["GET", "POST", "OPTIONS"],
+        allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
+        expose_headers=["X-Request-ID"],
+    )
     app.add_middleware(OpenTelemetryMiddleware)
     app.include_router(health_router)
     app.include_router(api_router)
