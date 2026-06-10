@@ -19,6 +19,31 @@ This roadmap is intentionally vertical and PR-sized. Each phase should produce a
 3. Stored telemetry can be associated with services, clusters, and workloads.
 4. The first phase leaves behind a clean scaffold for backend, frontend, infra, docs, and tests.
 
+## Phase 1.5: Security and Governance Baseline
+
+**Goal:** Harden the modular monolith with secrets management, identity, tenant isolation, redaction, and AI guardrails before the detection engine begins to consume more data.
+**Mode:** mvp
+
+**Requirements Covered:**
+- SEC-01
+- SEC-02
+- SEC-03
+- SEC-04
+- SEC-05
+- SEC-06
+- SEC-07
+- SEC-08
+- SEC-09
+- ARC-01
+
+**Success Criteria**
+1. Secrets are sourced from Vault or a Vault-compatible local path, with no secret values committed to the repo or hardcoded in environment examples.
+2. Requests are protected by explicit CORS policy, authentication, and authorization, with tenant-scoped access enforced through PostgreSQL row-level security.
+3. Traces, logs, and prompt payloads are redacted at the boundary so sensitive data does not leave the app in plaintext.
+4. AI-facing features have guardrails and evaluation gates using NeMo Guardrails and RAGAS before they can ship.
+5. Security and audit events are emitted in a SIEM-friendly format for later detection and review.
+6. The backend remains a modular monolith with async-first IO boundaries and domain modules that can be split later only if evidence justifies it.
+
 ## Phase 2: Detection Core
 
 **Goal:** Convert normalized telemetry into findings, incidents, RCA, and health signals.
@@ -67,7 +92,7 @@ This roadmap is intentionally vertical and PR-sized. Each phase should produce a
 **Success Criteria**
 1. Important findings and incident updates can be pushed to Slack.
 2. The AI copilot can answer questions about incidents, costs, and service health.
-3. Security anomaly findings appear in the same operational flow as other findings.
+3. Security anomaly fiprepare this as the first small PR branch for Phase 1ndings appear in the same operational flow as other findings.
 
 ## Phase 5: FinOps and Predictive Reliability
 
@@ -93,6 +118,17 @@ Success criteria:
 2. CloudWatch and OpenObserve adapters can ingest sample telemetry through a common normalized model.
 3. Stored telemetry can be associated with services, clusters, and workloads.
 4. The first phase leaves behind a clean scaffold for backend, frontend, infra, docs, and tests.
+
+**Phase 1.5: Security and Governance Baseline**
+Goal: Harden the modular monolith with secrets management, identity, tenant isolation, redaction, and AI guardrails before the detection engine begins to consume more data.
+Requirements: SEC-01, SEC-02, SEC-03, SEC-04, SEC-05, SEC-06, SEC-07, SEC-08, SEC-09, ARC-01
+Success criteria:
+1. Secrets are sourced from Vault or a Vault-compatible local path, with no secret values committed to the repo or hardcoded in environment examples.
+2. Requests are protected by explicit CORS policy, authentication, and authorization, with tenant-scoped access enforced through PostgreSQL row-level security.
+3. Traces, logs, and prompt payloads are redacted at the boundary so sensitive data does not leave the app in plaintext.
+4. AI-facing features have guardrails and evaluation gates using NeMo Guardrails and RAGAS before they can ship.
+5. Security and audit events are emitted in a SIEM-friendly format for later detection and review.
+6. The backend remains a modular monolith with async-first IO boundaries and domain modules that can be split later only if evidence justifies it.
 
 **Phase 2: Detection Core**
 Goal: Convert normalized telemetry into findings, incidents, RCA, and health signals.

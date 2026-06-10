@@ -31,16 +31,29 @@ def ready(request: Request) -> ReadyResponse:
 
     settings = request.app.state.settings
     adapters = request.app.state.adapter_registry.capabilities()
+    database_ready = getattr(request.app.state, "database_ready", False)
+
+    if not database_ready:
+        database_status = ReadyDatabaseStatus(
+            status="degraded",
+            error=getattr(request.app.state, "database_error", None)
+            or "Database migrations have not completed.",
+        )
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=ReadyResponse(
+                status="degraded",
+                service=settings.otel_service_name,
+                database=database_status,
+                adapters=adapters,
+            ).model_dump(mode="json"),
+        )
 
     try:
         database = ping_database(request.app.state.engine)
         database_status = ReadyDatabaseStatus(status="ready", checked_at=database["checked_at"])
-        overall_status: str = "ready"
     except SQLAlchemyError as exc:
         database_status = ReadyDatabaseStatus(status="degraded", error=str(exc))
-        overall_status = "degraded"
-
-    if overall_status != "ready":
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=ReadyResponse(

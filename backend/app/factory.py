@@ -9,8 +9,9 @@ from fastapi import FastAPI
 from app.api.health import health_router
 from app.api.router import api_router
 from app.core.config import Settings, get_settings
-from app.core.database import build_engine, build_session_factory, close_engine, ensure_schema
+from app.core.database import build_engine, build_session_factory, close_engine
 from app.core.middleware import OpenTelemetryMiddleware
+from app.core.migrations import upgrade_database
 from app.core.telemetry import configure_telemetry
 from app.domains.telemetry.adapters import (
     AdapterRegistry,
@@ -55,7 +56,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.session_factory = build_session_factory(engine)
 
         try:
-            ensure_schema(engine)
+            upgrade_database(active_settings.database_url)
             app.state.database_ready = True
         except Exception as exc:  # pragma: no cover - exercised when DB is unavailable
             app.state.database_error = str(exc)
@@ -78,4 +79,3 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(health_router)
     app.include_router(api_router)
     return app
-

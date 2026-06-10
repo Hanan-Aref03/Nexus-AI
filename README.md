@@ -13,6 +13,8 @@ Phase 1 is the telemetry foundation:
 - Normalized telemetry ingestion
 - PostgreSQL storage bootstrap with local dev support
 - Adapter seams for future CloudWatch and OpenObserve work
+- Modular-monolith backend design so security and tenant policy stay centralized before any split is justified
+- Phase 1.5 security and governance hardening is the next planned slice before Phase 2 detection work
 
 ## Repo Shape
 
@@ -20,7 +22,8 @@ Phase 1 is the telemetry foundation:
 - `frontend/` - Next.js dashboard and investigation experience
 - `infra/` - Docker, deployment, and infrastructure definitions
 - `docs/phases/` - Explanation docs for each roadmap phase
-- `tests/` - End-to-end and regression test harnesses
+- `docs/adr/` - Architecture decision records and system-level rationale
+- `tests/` - Canonical unit, integration, and e2e test harnesses
 - `.planning/` - Project memory, requirements, roadmap, and state
 
 ## Working Agreement
@@ -29,6 +32,7 @@ Phase 1 is the telemetry foundation:
 - Prefer vertical slices over large horizontal layers.
 - Make each phase buildable, testable, and easy to explain.
 - Prefer free/local dependencies first, then layer in live connectors behind adapter seams.
+- Treat the backend as a modular monolith until security, auth, and tenant boundaries prove they need to split.
 
 ## Local Development
 
@@ -36,6 +40,7 @@ Phase 1 is the telemetry foundation:
 2. Start the PostgreSQL and backend stack with `docker compose -f infra/docker/docker-compose.yml up --build`.
 3. Run `pytest` from the repo root to exercise the backend normalization and smoke tests.
 4. Use the sample batch in `backend/app/domains/telemetry/sample_data.py` for offline demos.
+5. Alembic migrations apply automatically during backend startup, so the schema version is always driven from one source of truth.
 
 ## Phase Docs
 

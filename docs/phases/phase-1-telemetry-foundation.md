@@ -11,7 +11,8 @@ This phase creates the smallest useful platform foundation: a backend that can r
 - Normalized telemetry intake at `POST /api/v1/telemetry/ingest`
 - Adapter discovery at `GET /api/v1/adapters`
 - Recent telemetry inspection at `GET /api/v1/telemetry/signals`
-- PostgreSQL schema bootstrap plus SQLite-friendly test behavior
+- Alembic-managed PostgreSQL schema bootstrap plus SQLite-friendly test behavior
+- Modular-monolith backend structure with clear domain seams, ready for the next security hardening slice
 
 ## Free and Local by Default
 
@@ -19,6 +20,8 @@ This phase creates the smallest useful platform foundation: a backend that can r
 - Sample and OTLP-compatible adapters are ready now
 - CloudWatch and OpenObserve remain behind the adapter seam and are marked as planned
 - No paid SaaS, no paid LLMs, and no external credentials are required for the phase-1 demo path
+- The schema has one canonical migration chain, so local development and Docker use the same versioned database story
+- Phase 1.5 will harden secrets, auth, RLS, redaction, and AI guardrails before Phase 2 begins
 
 ## How the Data Flows
 
@@ -41,4 +44,3 @@ This phase creates the smallest useful platform foundation: a backend that can r
 - Start the database and backend with the Docker stack in `infra/docker/docker-compose.yml`
 - Use the sample batch in `app/domains/telemetry/sample_data.py` for local demos and tests
 - Treat this phase as the foundation for later operational intelligence work, not as the final product
-

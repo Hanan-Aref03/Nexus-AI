@@ -1,20 +1,17 @@
-"""SQLAlchemy engine and schema helpers.
+"""SQLAlchemy engine and connection helpers.
 
 PR1 keeps persistence intentionally simple: a single normalized telemetry table
-backed by PostgreSQL, with SQLite-friendly behavior for tests.
+backed by PostgreSQL, with SQLite-friendly behavior for tests. Schema creation
+now lives in Alembic so the database has one canonical versioned path.
 """
 
 from __future__ import annotations
 
-from contextlib import suppress
 from datetime import datetime, timezone
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
-from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session, sessionmaker
-
-from app.domains.telemetry.models import Base
 
 
 def build_engine(database_url: str, echo: bool = False) -> Engine:
@@ -45,12 +42,6 @@ def build_session_factory(engine: Engine) -> sessionmaker[Session]:
     )
 
 
-def ensure_schema(engine: Engine) -> None:
-    """Create the PR1 schema if it is not already present."""
-
-    Base.metadata.create_all(bind=engine)
-
-
 def ping_database(engine: Engine) -> dict[str, datetime | str]:
     """Run a lightweight readiness check against the active database."""
 
@@ -66,5 +57,4 @@ def ping_database(engine: Engine) -> dict[str, datetime | str]:
 def close_engine(engine: Engine) -> None:
     """Dispose of pooled connections during application shutdown."""
 
-    with suppress(SQLAlchemyError):
-        engine.dispose()
+    engine.dispose()

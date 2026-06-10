@@ -51,6 +51,7 @@ Convert raw cloud telemetry into evidence-backed actions faster than a human tea
 | Run the project as a vertical MVP | Best fit for a new product and for small, reviewable PRs | Pending |
 | Start with AWS/Kubernetes/OpenTelemetry integrations | This matches the product brief and keeps the first slices realistic | Pending |
 | Split the repo around backend, frontend, infra, docs, and tests | Keeps the codebase easy to navigate as the product grows | Pending |
+| Keep the backend as a modular monolith until tenant isolation, security policy, and domain ownership stabilize | Centralized security enforcement and lower ops overhead are the right trade-off before the product proves a split is necessary | Pending |
 
 ## Evolution
 

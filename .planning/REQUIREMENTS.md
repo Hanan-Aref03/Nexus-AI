@@ -37,6 +37,22 @@ Requirements for the first release. Each maps to roadmap phases.
 - [ ] **OPS-01**: User can receive Slack alerts for important findings or incident updates.
 - [ ] **OPS-02**: User can move incidents through open, acknowledged, investigating, and resolved states.
 
+### Platform and Security
+
+- [ ] **SEC-01**: Secrets are stored in Vault or a Vault-compatible local secret store and never hardcoded in the repository.
+- [ ] **SEC-02**: Traces, logs, and prompt payloads are redacted before export so sensitive data does not leave the app in plaintext.
+- [ ] **SEC-03**: The backend enforces an explicit CORS policy and rejects unexpected origins.
+- [ ] **SEC-04**: Users authenticate and authorize through tenant-aware claims before they can access protected resources.
+- [ ] **SEC-05**: PostgreSQL row-level security prevents cross-tenant data access.
+- [ ] **SEC-06**: Security and audit events are emitted in a SIEM-friendly format for later review and detection workflows.
+- [ ] **SEC-07**: AI-facing features are constrained by NeMo Guardrails or equivalent policy guardrails.
+- [ ] **SEC-08**: AI outputs are evaluated with RAGAS before they are released to users.
+- [ ] **SEC-09**: Backend request handlers and persistence paths remain async-first for IO-bound work.
+
+### Architecture
+
+- [ ] **ARC-01**: The backend remains a modular monolith with explicit domain boundaries until a split is justified by measurable scale or ownership pressure.
+
 ## v2 Requirements
 
 Deferred to future release. Tracked so they do not quietly creep into v1.
@@ -71,6 +87,16 @@ Updated during roadmap creation.
 | ING-02 | Phase 1 | Pending |
 | ING-03 | Phase 1 | Pending |
 | ING-04 | Phase 1 | Pending |
+| SEC-01 | Phase 1.5 | Pending |
+| SEC-02 | Phase 1.5 | Pending |
+| SEC-03 | Phase 1.5 | Pending |
+| SEC-04 | Phase 1.5 | Pending |
+| SEC-05 | Phase 1.5 | Pending |
+| SEC-06 | Phase 1.5 | Pending |
+| SEC-07 | Phase 1.5 | Pending |
+| SEC-08 | Phase 1.5 | Pending |
+| SEC-09 | Phase 1.5 | Pending |
+| ARC-01 | Phase 1.5 | Pending |
 | ANLY-01 | Phase 2 | Pending |
 | ANLY-02 | Phase 2 | Pending |
 | ANLY-03 | Phase 2 | Pending |
@@ -87,10 +113,13 @@ Updated during roadmap creation.
 | ANLY-07 | Phase 5 | Pending |
 
 **Coverage:**
-- v1 requirements: 18 total
-- Mapped to phases: 18
+- v1 requirements: 28 total
+- Mapped to phases: 28
 - Unmapped: 0
+
+**Coverage note:**
+- Security, architecture, and AI-evaluation requirements are intentionally grouped into Phase 1.5 so they can land as a dedicated hardening slice before Phase 2 starts.
 
 ---
 *Requirements defined: 2026-06-09*
-*Last updated: 2026-06-09 after initial definition*
+*Last updated: 2026-06-10 after security and governance planning*
