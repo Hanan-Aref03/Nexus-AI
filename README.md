@@ -14,7 +14,8 @@ Phase 1 is the telemetry foundation:
 - PostgreSQL storage bootstrap with local dev support
 - Adapter seams for future CloudWatch and OpenObserve work
 - Modular-monolith backend design so security and tenant policy stay centralized before any split is justified
-- Phase 1.5 security and governance hardening is the next planned slice before Phase 2 detection work
+- Phase 1.5 security and governance hardening is underway with CORS, signed bearer auth, tenant-scoped persistence, redaction, Vault seams, and guardrail/evaluation seams
+- Phase 3 is starting to surface the investigation UX as a polished frontend console
 
 ## Repo Shape
 
@@ -37,10 +38,11 @@ Phase 1 is the telemetry foundation:
 ## Local Development
 
 1. Copy `.env.example` to `.env` if you want to run the backend directly on your machine.
-2. Start the PostgreSQL and backend stack with `docker compose -f infra/docker/docker-compose.yml up --build`.
+2. Start the full local stack with `docker compose up --build` from the repository root. The root `compose.yml` is the canonical local stack and launches PostgreSQL, the FastAPI backend, and the Investigation UX frontend.
 3. Run `pytest` from the repo root to exercise the backend normalization and smoke tests.
 4. Use the sample batch in `backend/app/domains/telemetry/sample_data.py` for offline demos.
 5. Alembic migrations apply automatically during backend startup, so the schema version is always driven from one source of truth.
+6. Open `http://localhost:3000` to explore the frontend dashboard once the stack is running.
 
 ## Phase Docs
 

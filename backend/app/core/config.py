@@ -21,6 +21,21 @@ class Settings(BaseSettings):
         default="postgresql+psycopg2://nexusai:nexusai@localhost:5432/nexusai"
     )
     database_echo: bool = False
+    cors_allow_origins: list[str] = Field(
+        default_factory=lambda: [
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+        ]
+    )
+    auth_signing_key: str = Field(default="dev-only-change-me")
+    auth_token_issuer: str = "nexusai"
+    auth_token_audience: str = "nexusai-web"
+    vault_address: str | None = None
+    vault_token: str | None = None
+    vault_secret_mount: str = "secret"
+    vault_secret_path: str = "nexusai/security"
+    guardrails_enabled: bool = False
+    ragas_enabled: bool = False
     otel_service_name: str = "nexusai-api"
     otel_console_exporter: bool = True
 
@@ -36,4 +51,3 @@ def get_settings() -> Settings:
     """Return a cached settings object for normal application use."""
 
     return Settings()
-

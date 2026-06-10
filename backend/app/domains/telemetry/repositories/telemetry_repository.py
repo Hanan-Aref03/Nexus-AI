@@ -8,6 +8,8 @@ from uuid import uuid4
 from sqlalchemy import Select, desc, select
 from sqlalchemy.orm import Session
 
+from app.core.auth import SecurityPrincipal
+from app.core.rls import apply_tenant_context
 from app.domains.telemetry.models import TelemetrySignalRecord
 from app.domains.telemetry.schemas import TelemetryIngestRequest, TelemetrySignalIn, TelemetrySignalOut
 
@@ -22,9 +24,11 @@ class TelemetryRepository:
         self,
         batch: TelemetryIngestRequest,
         signals: list[TelemetrySignalIn],
+        principal: SecurityPrincipal,
     ) -> list[TelemetrySignalRecord]:
         """Persist one normalized batch and return the stored rows."""
 
+        apply_tenant_context(self._session, principal)
         records: list[TelemetrySignalRecord] = []
         now = datetime.now(timezone.utc)
 
@@ -32,12 +36,14 @@ class TelemetryRepository:
             records.append(
                 TelemetrySignalRecord(
                     id=signal.signal_id or str(uuid4()),
+                    tenant_id=principal.tenant_id,
                     source_name=batch.source_name,
                     source_type=batch.source_type.value,
                     kind=signal.kind.value,
                     severity=signal.severity.value,
                     summary=signal.summary,
                     description=signal.description,
+                    actor_subject=principal.subject,
                     observed_at=signal.observed_at or now,
                     received_at=now,
                     batch_label=batch.batch_label,
@@ -57,11 +63,17 @@ class TelemetryRepository:
         self._session.commit()
         return records
 
-    def list_recent_signals(self, limit: int = 20) -> list[TelemetrySignalRecord]:
+    def list_recent_signals(
+        self,
+        principal: SecurityPrincipal,
+        limit: int = 20,
+    ) -> list[TelemetrySignalRecord]:
         """Return the most recent stored telemetry signals."""
 
+        apply_tenant_context(self._session, principal)
         statement: Select[tuple[TelemetrySignalRecord]] = (
             select(TelemetrySignalRecord)
+            .where(TelemetrySignalRecord.tenant_id == principal.tenant_id)
             .order_by(desc(TelemetrySignalRecord.observed_at), desc(TelemetrySignalRecord.received_at))
             .limit(limit)
         )
@@ -72,3 +84,5 @@ class TelemetryRepository:
 
         return TelemetrySignalOut.model_validate(record)
 
+
+__all__ = ["TelemetryRepository"]

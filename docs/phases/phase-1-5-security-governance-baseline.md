@@ -17,6 +17,7 @@ This phase is the hardening layer between the telemetry foundation and the detec
 - NeMo Guardrails around any LLM-facing path
 - RAGAS evaluation for generated outputs and prompt changes
 - A documented modular-monolith decision in [ADR 0001](../adr/0001-modular-monolith.md) so the backend stays coherent while the product is still taking shape
+- The first PR in this phase implements the request and data-plane security foundation: CORS, signed bearer auth, tenant-scoped telemetry, redaction, Vault secret loading, and the guardrail/evaluation seams
 
 ## Why We Keep the Backend as a Modular Monolith
 

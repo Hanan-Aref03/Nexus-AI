@@ -41,6 +41,6 @@ This phase creates the smallest useful platform foundation: a backend that can r
 
 ## Local Run Notes
 
-- Start the database and backend with the Docker stack in `infra/docker/docker-compose.yml`
+- Start the database and backend with `docker compose up --build` from the repository root
 - Use the sample batch in `app/domains/telemetry/sample_data.py` for local demos and tests
 - Treat this phase as the foundation for later operational intelligence work, not as the final product

@@ -21,7 +21,15 @@ FastAPI service for telemetry ingestion, analysis, incident handling, and extern
 - Adapter discovery at `GET /api/v1/adapters`
 - Recent telemetry inspection at `GET /api/v1/telemetry/signals`
 - Alembic-managed schema bootstrap for the telemetry store
-- Phase 1.5 will add the security, governance, and evaluation baseline before detection begins
+- Phase 1.5 adds the first security slice: CORS, signed bearer auth, tenant-scoped telemetry, redaction, Vault seams, and guardrail/evaluation seams
+
+## Phase 2 Highlights
+
+- Deterministic anomaly detection with persisted findings and incidents
+- Correlation of related signals into one tenant-scoped incident
+- Incident lifecycle updates across `open`, `acknowledged`, `investigating`, and `resolved`
+- Service and workload health scores derived from active findings
+- Detection endpoints at `POST /api/v1/analysis/run`, `GET /api/v1/analysis/findings`, `GET /api/v1/analysis/incidents`, and `GET /api/v1/analysis/health-scores`
 
 ## Local Run
 
@@ -31,4 +39,16 @@ From the `backend/` directory:
 uvicorn app.main:app --reload
 ```
 
-The root repository also ships a Docker compose stack under `infra/docker/` for the database + backend path. Database migrations run automatically during application startup so the local environment and the containerized environment stay aligned.
+To run the full repository test suite from the repo root:
+
+```bash
+python -m pytest
+```
+
+To run the local database + backend stack from the repository root:
+
+```bash
+docker compose up --build
+```
+
+The root `compose.yml` is the single canonical Docker entrypoint. Database migrations run automatically during application startup so the local environment and the containerized environment stay aligned.

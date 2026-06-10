@@ -6,8 +6,9 @@ so routes stay thin and readable.
 
 from __future__ import annotations
 
+from app.core.auth import SecurityPrincipal
 from app.domains.telemetry.adapters.base import AdapterRegistry
-from app.domains.telemetry.repository import TelemetryRepository
+from app.domains.telemetry.repositories.telemetry_repository import TelemetryRepository
 from app.domains.telemetry.schemas import (
     TelemetryIngestRequest,
     TelemetryIngestResult,
@@ -22,12 +23,12 @@ class TelemetryIngestService:
         self._adapter_registry = adapter_registry
         self._repository = repository
 
-    def ingest(self, batch: TelemetryIngestRequest) -> TelemetryIngestResult:
+    def ingest(self, batch: TelemetryIngestRequest, principal: SecurityPrincipal) -> TelemetryIngestResult:
         """Normalize a batch and persist the resulting signals."""
 
         adapter = self._adapter_registry.get(batch.source_type)
         normalized_signals = adapter.normalize(batch)
-        stored_records = self._repository.save_signals(batch=batch, signals=normalized_signals)
+        stored_records = self._repository.save_signals(batch=batch, signals=normalized_signals, principal=principal)
 
         return TelemetryIngestResult(
             source_name=batch.source_name,
@@ -38,8 +39,13 @@ class TelemetryIngestService:
             record_ids=[record.id for record in stored_records],
         )
 
-    def list_recent_signals(self, limit: int = 20) -> list[TelemetrySignalOut]:
+    def list_recent_signals(self, principal: SecurityPrincipal, limit: int = 20) -> list[TelemetrySignalOut]:
         """Return the latest stored normalized signals for inspection."""
 
-        return [self._repository.to_out(record) for record in self._repository.list_recent_signals(limit=limit)]
+        return [
+            self._repository.to_out(record)
+            for record in self._repository.list_recent_signals(principal=principal, limit=limit)
+        ]
 
+
+__all__ = ["TelemetryIngestService"]

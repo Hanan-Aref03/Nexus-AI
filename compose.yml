@@ -1,0 +1,75 @@
+name: nexusai
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: nexusai
+      POSTGRES_USER: nexusai
+      POSTGRES_PASSWORD: nexusai
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexusai -d nexusai"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/docker/postgres/init:/docker-entrypoint-initdb.d:ro
+
+  backend:
+    build:
+      context: ./backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      AUTH_SIGNING_KEY: dev-only-change-me
+      AUTH_TOKEN_AUDIENCE: nexusai-web
+      AUTH_TOKEN_ISSUER: nexusai
+      APP_VERSION: 0.1.0
+      CORS_ALLOW_ORIGINS: '["http://localhost:3000","http://127.0.0.1:3000"]'
+      DATABASE_URL: postgresql+psycopg2://nexusai:nexusai@postgres:5432/nexusai
+      ENVIRONMENT: development
+      GUARDRAILS_ENABLED: "false"
+      OTEL_CONSOLE_EXPORTER: "true"
+      OTEL_SERVICE_NAME: nexusai-api
+      RAGAS_ENABLED: "false"
+      VAULT_ADDRESS: ""
+      VAULT_SECRET_MOUNT: secret
+      VAULT_SECRET_PATH: nexusai/security
+      VAULT_TOKEN: ""
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+    command: npm run dev -- --hostname 0.0.0.0 --port 3000
+    depends_on:
+      - backend
+    environment:
+      AUTH_SIGNING_KEY: dev-only-change-me
+      AUTH_TOKEN_AUDIENCE: nexusai-web
+      AUTH_TOKEN_ISSUER: nexusai
+      BACKEND_BASE_URL: http://backend:8000
+      NEXUSAI_DEMO_ROLES: analysis:read,analysis:write
+      NEXUSAI_DEMO_SUBJECT: frontend-investigator
+      NEXUSAI_TENANT_ID: platform-demo
+      NEXT_TELEMETRY_DISABLED: "1"
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+
+volumes:
+  postgres_data:
+  frontend_node_modules:
