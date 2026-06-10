@@ -1,0 +1,47 @@
+# OS and editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+.coverage
+coverage.xml
+
+# Node / Next.js
+node_modules/
+.next/
+dist/
+build/
+out/
+
+# Logs and local env
+*.log
+.env
+.env.*
+!.env.example
+
+# Test and temp output
+tmp/
+temp/
+.tmp/
+pytest-cache-files-*/
+.tmp/pytest-cache-files-*/
+.tmp/pytest-temp/
+
+# Platform-specific
+*.sqlite
+*.sqlite3
+*.db
