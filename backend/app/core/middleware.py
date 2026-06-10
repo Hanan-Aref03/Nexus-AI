@@ -7,6 +7,7 @@ depending on an extra instrumentation package.
 from __future__ import annotations
 
 from typing import Callable
+from uuid import uuid4
 
 from fastapi import Request
 from opentelemetry import trace
@@ -21,11 +22,14 @@ class OpenTelemetryMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next: Callable[[Request], Response]) -> Response:
         tracer = trace.get_tracer("nexusai.http")
         span_name = f"{request.method} {request.url.path}"
+        request_id = request.headers.get("X-Request-ID") or str(uuid4())
+        request.state.request_id = request_id
 
         with tracer.start_as_current_span(span_name) as span:
             span.set_attribute("http.method", request.method)
             span.set_attribute("http.target", request.url.path)
             span.set_attribute("http.scheme", request.url.scheme)
+            span.set_attribute("http.request_id", request_id)
             if request.client:
                 span.set_attribute("net.peer.ip", request.client.host)
 
@@ -39,5 +43,5 @@ class OpenTelemetryMiddleware(BaseHTTPMiddleware):
             span.set_attribute("http.status_code", response.status_code)
             if response.status_code >= 500:
                 span.set_status(Status(StatusCode.ERROR))
+            response.headers["X-Request-ID"] = request_id
             return response
-

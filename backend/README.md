@@ -21,7 +21,7 @@ FastAPI service for telemetry ingestion, analysis, incident handling, and extern
 - Adapter discovery at `GET /api/v1/adapters`
 - Recent telemetry inspection at `GET /api/v1/telemetry/signals`
 - Alembic-managed schema bootstrap for the telemetry store
-- Phase 1.5 will add the security, governance, and evaluation baseline before detection begins
+- Phase 1.5 adds the first security slice: CORS, signed bearer auth, tenant-scoped telemetry, redaction, Vault seams, and guardrail/evaluation seams
 
 ## Local Run
 

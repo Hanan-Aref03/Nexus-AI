@@ -14,7 +14,7 @@ Phase 1 is the telemetry foundation:
 - PostgreSQL storage bootstrap with local dev support
 - Adapter seams for future CloudWatch and OpenObserve work
 - Modular-monolith backend design so security and tenant policy stay centralized before any split is justified
-- Phase 1.5 security and governance hardening is the next planned slice before Phase 2 detection work
+- Phase 1.5 security and governance hardening is underway with CORS, signed bearer auth, tenant-scoped persistence, redaction, Vault seams, and guardrail/evaluation seams
 
 ## Repo Shape
 
