@@ -8,13 +8,13 @@ from sqlalchemy.orm import Session
 from app.core.auth import SecurityPrincipal, require_roles
 from app.core.dependencies import get_adapter_registry, get_session
 from app.domains.telemetry.adapters.base import AdapterNotReadyError, AdapterRegistry
-from app.domains.telemetry.repository import TelemetryRepository
+from app.domains.telemetry.repositories import TelemetryRepository
 from app.domains.telemetry.schemas import (
     TelemetryIngestRequest,
     TelemetryIngestResult,
     TelemetrySignalOut,
 )
-from app.domains.telemetry.service import TelemetryIngestService
+from app.domains.telemetry.services import TelemetryIngestService
 
 telemetry_router = APIRouter(prefix="/telemetry", tags=["telemetry"])
 

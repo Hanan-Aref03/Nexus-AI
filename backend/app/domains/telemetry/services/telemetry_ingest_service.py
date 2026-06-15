@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from app.core.auth import SecurityPrincipal
 from app.domains.telemetry.adapters.base import AdapterRegistry
-from app.domains.telemetry.repository import TelemetryRepository
+from app.domains.telemetry.repositories.telemetry_repository import TelemetryRepository
 from app.domains.telemetry.schemas import (
     TelemetryIngestRequest,
     TelemetryIngestResult,
@@ -46,3 +46,6 @@ class TelemetryIngestService:
             self._repository.to_out(record)
             for record in self._repository.list_recent_signals(principal=principal, limit=limit)
         ]
+
+
+__all__ = ["TelemetryIngestService"]

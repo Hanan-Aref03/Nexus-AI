@@ -6,11 +6,9 @@ from datetime import datetime, timezone
 from typing import Any
 
 from sqlalchemy import DateTime, Index, JSON, String, Text, func, text
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 
-
-class Base(DeclarativeBase):
-    """Shared ORM base for the backend models."""
+from app.core.db_base import Base
 
 
 class TelemetrySignalRecord(Base):

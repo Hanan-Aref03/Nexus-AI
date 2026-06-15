@@ -83,3 +83,6 @@ class TelemetryRepository:
         """Convert ORM rows into API response payloads."""
 
         return TelemetrySignalOut.model_validate(record)
+
+
+__all__ = ["TelemetryRepository"]

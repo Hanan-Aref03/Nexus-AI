@@ -13,7 +13,9 @@ BACKEND_ROOT = Path(__file__).resolve().parents[1]
 if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
-from app.domains.telemetry.models import Base  # noqa: E402
+from app.core.db_base import Base  # noqa: E402
+from app.domains.analysis import models as analysis_models  # noqa: F401,E402
+from app.domains.telemetry import models as telemetry_models  # noqa: F401,E402
 
 
 config = context.config

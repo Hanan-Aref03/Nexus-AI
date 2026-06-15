@@ -62,11 +62,23 @@ def test_initial_migration_can_adopt_an_existing_schema() -> None:
     try:
         inspector = inspect(verification_engine)
         assert inspector.has_table("telemetry_signals")
+        assert inspector.has_table("analysis_incidents")
+        assert inspector.has_table("analysis_findings")
+        assert inspector.has_table("analysis_evaluations")
         assert inspector.has_table("alembic_version")
         assert {"tenant_id", "actor_subject"}.issubset({column["name"] for column in inspector.get_columns("telemetry_signals")})
+        assert {"tenant_id", "correlation_key", "state", "recommendations"}.issubset(
+            {column["name"] for column in inspector.get_columns("analysis_incidents")}
+        )
+        assert {"tenant_id", "incident_id", "telemetry_signal_id", "category", "evidence"}.issubset(
+            {column["name"] for column in inspector.get_columns("analysis_findings")}
+        )
+        assert {"tenant_id", "telemetry_signal_id", "finding_id", "outcome"}.issubset(
+            {column["name"] for column in inspector.get_columns("analysis_evaluations")}
+        )
 
         with verification_engine.connect() as connection:
             version_rows = list(connection.execute(text("SELECT version_num FROM alembic_version")))
-        assert version_rows == [("0002_security_hardening",)]
+        assert version_rows == [("0003_detection_core",)]
     finally:
         verification_engine.dispose()
