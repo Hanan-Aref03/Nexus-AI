@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     ragas_enabled: bool = False
     otel_service_name: str = "nexusai-api"
     otel_console_exporter: bool = True
+    slack_channel: str = "#nexusai-alerts"
 
     model_config = SettingsConfigDict(
         env_file=".env",

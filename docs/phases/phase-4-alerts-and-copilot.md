@@ -28,7 +28,7 @@ The first PR in this phase stays intentionally small:
 - derive an alert inbox from the existing analysis store
 - expose `GET /api/v1/alerts` as the first backend seam
 - render a concise workspace alert queue with a copilot prompt preview
-- keep Slack as a preview field only so the next PR can wire a real connector behind the same contract
+- keep Slack behind a local connector seam so the next transport can swap in cleanly
 - avoid a new alert table or migration until the inbox semantics are proven useful
 
 ## Why This Shape
@@ -36,3 +36,9 @@ The first PR in this phase stays intentionally small:
 - Incidents already aggregate evidence, so they are a stronger base than raw findings for the first alert queue
 - Health scores add a second signal that catches degradations before they become noisy incident churn
 - The feed stays tenant aware and review friendly, which makes it safe to ship before external delivery channels arrive
+
+## Copilot Direction
+
+- The current PRs keep the copilot experience deterministic and preview-only
+- When the live assistant lands, the preferred provider order is a free-tier Gemini path first, then Grok as a fallback if needed
+- That provider choice should stay behind a dedicated seam so the UI and alert flow do not depend on one vendor

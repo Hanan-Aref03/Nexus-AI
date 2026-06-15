@@ -27,4 +27,4 @@ The Phase 4 alert inbox is intentionally read-only in its first PR:
 - `app/domains/alerts/` derives alerts from the existing analysis records
 - `app/api/v1/alerts.py` exposes the first alert feed endpoint
 - no new alert table or migration is required yet
-- Slack and copilot are represented as preview fields so future PRs can plug in delivery channels without changing the feed shape
+- Slack now flows through a local connector seam, while copilot stays preview-only until the provider seam is added
