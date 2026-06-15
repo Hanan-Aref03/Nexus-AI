@@ -19,3 +19,12 @@ Inside each domain, keep one clear home for each concern:
 - `schemas.py` for request and response contracts
 
 Keep new modules narrow and purposeful so each implementation PR stays easy to review.
+
+## Alerts Slice
+
+The Phase 4 alert inbox is intentionally read-only in its first PR:
+
+- `app/domains/alerts/` derives alerts from the existing analysis records
+- `app/api/v1/alerts.py` exposes the first alert feed endpoint
+- no new alert table or migration is required yet
+- Slack and copilot are represented as preview fields so future PRs can plug in delivery channels without changing the feed shape

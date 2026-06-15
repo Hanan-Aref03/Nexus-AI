@@ -22,12 +22,13 @@ function getBackendAuthContext(session: AuthSession | null) {
   const issuedAt = Math.floor(Date.now() / 1000);
 
   if (session) {
+    const roles = [session.role, ...session.permissions];
     return {
       audience: process.env.AUTH_TOKEN_AUDIENCE ?? "nexusai-web",
       issuer: process.env.AUTH_TOKEN_ISSUER ?? "nexusai",
       tenantId: session.tenantId,
       subject: session.userId,
-      roles: [session.role],
+      roles,
       permissions: session.permissions,
       email: session.email,
       displayName: session.displayName,
@@ -41,11 +42,11 @@ function getBackendAuthContext(session: AuthSession | null) {
     issuer: process.env.AUTH_TOKEN_ISSUER ?? "nexusai",
     tenantId: process.env.NEXUSAI_TENANT_ID ?? "platform-demo",
     subject: process.env.NEXUSAI_DEMO_SUBJECT ?? "frontend-investigator",
-    roles: (process.env.NEXUSAI_DEMO_ROLES ?? "analysis:read,analysis:write")
+    roles: (process.env.NEXUSAI_DEMO_ROLES ?? "telemetry:read,analysis:read,analysis:write,alerts:read")
       .split(",")
       .map((role) => role.trim())
       .filter(Boolean),
-    permissions: ["workspace:read", "evidence:read"],
+    permissions: ["workspace:read", "telemetry:read", "analysis:read", "evidence:read", "alerts:read"],
     email: "demo@nexusai.local",
     displayName: "Demo reviewer",
     issuedAt,
