@@ -59,7 +59,7 @@ services:
       AUTH_TOKEN_AUDIENCE: nexusai-web
       AUTH_TOKEN_ISSUER: nexusai
       BACKEND_BASE_URL: http://backend:8000
-      NEXUSAI_DEMO_ROLES: analysis:read,analysis:write
+      NEXUSAI_DEMO_ROLES: telemetry:read,analysis:read,analysis:write,alerts:read
       NEXUSAI_DEMO_SUBJECT: frontend-investigator
       NEXUSAI_TENANT_ID: platform-demo
       NEXT_TELEMETRY_DISABLED: "1"

@@ -10,6 +10,7 @@ export type AnalysisFindingCategory = "reliability" | "capacity" | "security" | 
 export type AnalysisScopeKind = "service" | "workload" | "cluster" | "namespace";
 export type AnalysisIncidentState = "open" | "acknowledged" | "investigating" | "resolved";
 export type AnalysisHealthStatus = "healthy" | "watch" | "degraded" | "critical";
+export type AlertKind = "incident" | "health";
 
 export interface BackendHealthResponse {
   status: "ok";
@@ -157,6 +158,49 @@ export interface DashboardStats {
   averageHealth: number;
   topService: string;
   latestSignal: string;
+}
+
+export interface AlertsSummary {
+  total: number;
+  incidents: number;
+  health: number;
+  security: number;
+  critical: number;
+  warning: number;
+  info: number;
+  scopes: number;
+}
+
+export interface WorkspaceAlert {
+  id: string;
+  tenantId: string;
+  kind: AlertKind;
+  severity: TelemetrySeverity;
+  scopeKind: AnalysisScopeKind;
+  scopeName: string;
+  title: string;
+  summary: string;
+  sourceLabel: string;
+  sourceDetail: string;
+  actionLabel: string;
+  href: string;
+  confidence: number;
+  evidenceCount: number;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+  slackPreview: string;
+}
+
+export interface AlertsFeed {
+  mode: BackendMode;
+  generatedAt: string;
+  sourceLabel: string;
+  sourceReason: string;
+  summary: AlertsSummary;
+  copilotPrompt: string;
+  slackPreview: string;
+  alerts: WorkspaceAlert[];
 }
 
 export interface InvestigationBundle {

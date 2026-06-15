@@ -6,6 +6,7 @@ Expected early routes include:
 
 - login and signup
 - dashboard overview
+- alert inbox
 - findings
 - incidents
 - impact map
@@ -18,6 +19,7 @@ Keep the route layer thin and push business-specific behavior into feature modul
 - `app/login/page.tsx` - workspace access
 - `app/signup/page.tsx` - workspace creation
 - `app/page.tsx` - dashboard overview
+- `app/alerts/page.tsx` - alert inbox and copilot preview
 - `app/findings/page.tsx` - evidence stream
 - `app/incidents/page.tsx` - incident room
 - `app/incidents/[incidentId]/page.tsx` - incident deep dive

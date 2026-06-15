@@ -31,6 +31,13 @@ FastAPI service for telemetry ingestion, analysis, incident handling, and extern
 - Service and workload health scores derived from active findings
 - Detection endpoints at `POST /api/v1/analysis/run`, `GET /api/v1/analysis/findings`, `GET /api/v1/analysis/incidents`, and `GET /api/v1/analysis/health-scores`
 
+## Phase 4 Highlights
+
+- Read-only alert inbox derived from the existing analysis store
+- `/api/v1/alerts` keeps the workspace and Slack delivery seams aligned without a separate alert table yet
+- Slack and copilot preview fields are part of the contract so later PRs can wire real integrations cleanly
+- No extra migration was needed for this slice because the feed is computed from existing analysis records
+
 ## Local Run
 
 From the `backend/` directory:

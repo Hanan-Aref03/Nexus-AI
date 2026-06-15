@@ -2,7 +2,7 @@
 
 export type WorkspaceRole = "owner" | "incident_commander" | "analyst" | "service_owner" | "viewer";
 
-export type WorkspaceRoute = "/" | "/findings" | "/incidents" | "/graph" | "/postmortems";
+export type WorkspaceRoute = "/" | "/alerts" | "/findings" | "/incidents" | "/graph" | "/postmortems";
 
 export interface AuthSession {
   sessionId: string;
@@ -58,36 +58,56 @@ export const ROLE_PROFILES: Record<WorkspaceRole, RoleProfile> = {
     label: "Owner",
     summary: "Full workspace control with access to every review surface.",
     tone: "success",
-    permissions: ["workspace:read", "workspace:manage", "evidence:read", "incident:manage", "summary:write"],
-    routes: ["/", "/findings", "/incidents", "/graph", "/postmortems"],
+    permissions: [
+      "workspace:read",
+      "workspace:manage",
+      "telemetry:read",
+      "telemetry:write",
+      "analysis:read",
+      "analysis:write",
+      "evidence:read",
+      "incident:manage",
+      "summary:write",
+      "alerts:read",
+    ],
+    routes: ["/", "/alerts", "/findings", "/incidents", "/graph", "/postmortems"],
   },
   incident_commander: {
     label: "Incident commander",
     summary: "Keeps incidents moving, aligns responders, and closes the loop.",
     tone: "warning",
-    permissions: ["workspace:read", "evidence:read", "incident:manage", "summary:write"],
-    routes: ["/", "/findings", "/incidents", "/graph", "/postmortems"],
+    permissions: [
+      "workspace:read",
+      "telemetry:read",
+      "analysis:read",
+      "analysis:write",
+      "evidence:read",
+      "incident:manage",
+      "summary:write",
+      "alerts:read",
+    ],
+    routes: ["/", "/alerts", "/findings", "/incidents", "/graph", "/postmortems"],
   },
   analyst: {
     label: "Analyst",
     summary: "Focuses on evidence, correlations, and the shape of the story.",
     tone: "info",
-    permissions: ["workspace:read", "evidence:read", "summary:write"],
-    routes: ["/", "/findings", "/graph", "/postmortems"],
+    permissions: ["workspace:read", "telemetry:read", "analysis:read", "evidence:read", "summary:write", "alerts:read"],
+    routes: ["/", "/alerts", "/findings", "/graph", "/postmortems"],
   },
   service_owner: {
     label: "Service owner",
     summary: "Tracks service impact and helps turn findings into action.",
     tone: "warning",
-    permissions: ["workspace:read", "evidence:read", "incident:read", "summary:write"],
-    routes: ["/", "/findings", "/incidents", "/postmortems"],
+    permissions: ["workspace:read", "telemetry:read", "analysis:read", "evidence:read", "incident:read", "summary:write", "alerts:read"],
+    routes: ["/", "/alerts", "/findings", "/incidents", "/postmortems"],
   },
   viewer: {
     label: "Viewer",
     summary: "Read-only access for review, sharing, and oversight.",
     tone: "muted",
-    permissions: ["workspace:read", "evidence:read"],
-    routes: ["/", "/findings"],
+    permissions: ["workspace:read", "telemetry:read", "analysis:read", "evidence:read", "alerts:read"],
+    routes: ["/", "/alerts", "/findings"],
   },
 };
 
@@ -102,6 +122,7 @@ export const ROLE_OPTIONS: RoleOption[] = (Object.entries(ROLE_PROFILES) as Arra
 
 export const DASHBOARD_ROUTES: Array<{ href: WorkspaceRoute; label: string }> = [
   { href: "/", label: "Overview" },
+  { href: "/alerts", label: "Alerts" },
   { href: "/findings", label: "Findings" },
   { href: "/incidents", label: "Incidents" },
   { href: "/graph", label: "Graph" },
