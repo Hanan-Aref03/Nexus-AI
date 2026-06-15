@@ -38,11 +38,13 @@ Phase 1 is the telemetry foundation:
 ## Local Development
 
 1. Copy `.env.example` to `.env` if you want to run the backend directly on your machine.
-2. Start the full local stack with `docker compose up --build` from the repository root. The root `compose.yml` is the canonical local stack and launches PostgreSQL, the FastAPI backend, and the Investigation UX frontend.
-3. Run `pytest` from the repo root to exercise the backend normalization and smoke tests.
-4. Use the sample batch in `backend/app/domains/telemetry/sample_data.py` for offline demos.
-5. Alembic migrations apply automatically during backend startup, so the schema version is always driven from one source of truth.
-6. Open `http://localhost:3000` to explore the frontend dashboard once the stack is running.
+2. Start the full local stack with `.\scripts\nexusai.ps1` from the repository root. This is the preferred one-command runner and launches PostgreSQL, the FastAPI backend, and the frontend through Docker Compose.
+3. Run `.\scripts\nexusai.ps1 check` to execute the validation bundle: backend tests, frontend typecheck, and Docker Compose config validation.
+4. Use `.\scripts\nexusai.ps1 logs` to stream combined service logs, and `.\scripts\nexusai.ps1 down` to stop the stack cleanly.
+5. If you prefer the raw Docker command, `docker compose up --build` still works from the repository root.
+6. Use the sample batch in `backend/app/domains/telemetry/sample_data.py` for offline demos.
+7. Alembic migrations apply automatically during backend startup, so the schema version is always driven from one source of truth.
+8. Open `http://localhost:3000` to explore the frontend dashboard once the stack is running.
 
 ## Phase Docs
 
