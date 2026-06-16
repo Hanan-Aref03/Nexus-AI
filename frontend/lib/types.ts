@@ -203,6 +203,32 @@ export interface AlertsFeed {
   alerts: WorkspaceAlert[];
 }
 
+export interface CopilotEvaluation {
+  policy: string;
+  faithfulness: number;
+  answerRelevancy: number;
+  contextPrecision: number;
+  summary: string;
+}
+
+export interface CopilotAnswer {
+  mode: BackendMode;
+  generatedAt: string;
+  sourceLabel: string;
+  sourceReason: string;
+  question: string;
+  provider: string;
+  usedFallback: boolean;
+  answer: string;
+  confidence: number;
+  followUp: string;
+  evidence: string[];
+  evaluation: CopilotEvaluation;
+  topAlertTitle: string | null;
+  topAlertScope: string | null;
+  topAlertSeverity: string | null;
+}
+
 export interface InvestigationBundle {
   mode: BackendMode;
   generatedAt: string;

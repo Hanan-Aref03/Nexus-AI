@@ -8,13 +8,15 @@ from app.core.auth import SecurityPrincipal
 from app.domains.alerts.repositories import AlertsRepository
 from app.domains.alerts.rules import AlertDraft, AlertsFeedDraft, build_alert_feed
 from app.domains.alerts.schemas import AlertKind, AlertOut, AlertSummary, AlertsFeedOut
+from app.integrations.slack.base import SlackConnector
 
 
 class AlertsService:
     """Assemble a concise alert inbox from the analysis store."""
 
-    def __init__(self, repository: AlertsRepository):
+    def __init__(self, repository: AlertsRepository, slack_connector: SlackConnector | None = None):
         self._repository = repository
+        self._slack_connector = slack_connector
 
     def list_alerts(self, principal: SecurityPrincipal, limit: int = 12) -> AlertsFeedOut:
         """Return the current alert feed for the tenant."""
@@ -36,6 +38,7 @@ class AlertsService:
                 else "No live analysis data is present yet, so a calm sample inbox is shown instead."
             ),
         )
+        slack_delivery = self._slack_connector.build_delivery(feed) if self._slack_connector is not None else None
         summary = self._summarize(feed)
 
         return AlertsFeedOut(
@@ -45,7 +48,7 @@ class AlertsService:
             source_reason=feed.source_reason,
             summary=summary,
             copilot_prompt=feed.copilot_prompt,
-            slack_preview=feed.slack_preview,
+            slack_preview=slack_delivery.preview if slack_delivery is not None else feed.slack_preview,
             alerts=[self._to_out(principal, item) for item in feed.alerts[:limit]],
         )
 

@@ -16,6 +16,8 @@ from app.core.guardrails import build_evaluation_engine, build_guardrail_engine
 from app.core.migrations import upgrade_database
 from app.core.telemetry import configure_telemetry
 from app.core.secrets import build_runtime_secrets
+from app.integrations.copilot import build_copilot_provider_chain
+from app.integrations.slack import build_slack_connector
 from app.domains.telemetry.adapters import (
     AdapterRegistry,
     CloudWatchTelemetryAdapter,
@@ -52,6 +54,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.adapter_registry = build_adapter_registry()
         app.state.guardrail_engine = build_guardrail_engine(active_settings.guardrails_enabled)
         app.state.evaluation_engine = build_evaluation_engine(active_settings.ragas_enabled)
+        app.state.copilot_provider_chain = build_copilot_provider_chain(active_settings)
+        app.state.slack_connector = build_slack_connector(active_settings)
         app.state.database_ready = False
         app.state.database_error = None
 

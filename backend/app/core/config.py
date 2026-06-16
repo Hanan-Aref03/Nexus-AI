@@ -36,8 +36,15 @@ class Settings(BaseSettings):
     vault_secret_path: str = "nexusai/security"
     guardrails_enabled: bool = False
     ragas_enabled: bool = False
+    gemini_api_key: str | None = None
+    gemini_model: str = "gemini-3.5-flash"
+    xai_api_key: str | None = None
+    xai_model: str = "grok-4.3"
+    copilot_timeout_seconds: float = 12.0
+    copilot_max_context_items: int = 5
     otel_service_name: str = "nexusai-api"
     otel_console_exporter: bool = True
+    slack_channel: str = "#nexusai-alerts"
 
     model_config = SettingsConfigDict(
         env_file=".env",
