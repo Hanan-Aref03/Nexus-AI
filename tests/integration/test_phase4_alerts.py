@@ -36,6 +36,8 @@ def test_alert_feed_is_authorized_and_derived_from_analysis_outputs() -> None:
     app = create_app(build_test_settings())
 
     with TestClient(app) as client:
+        assert hasattr(app.state, "slack_connector")
+
         alert_token = create_access_token(
             app.state.runtime_secrets,
             subject="tester-alerts",
