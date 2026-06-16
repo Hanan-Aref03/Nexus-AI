@@ -2,7 +2,7 @@
 
 export type WorkspaceRole = "owner" | "incident_commander" | "analyst" | "service_owner" | "viewer";
 
-export type WorkspaceRoute = "/" | "/alerts" | "/findings" | "/incidents" | "/graph" | "/postmortems";
+export type WorkspaceRoute = "/" | "/alerts" | "/findings" | "/incidents" | "/graph" | "/postmortems" | "/finops";
 
 export interface AuthSession {
   sessionId: string;
@@ -70,7 +70,7 @@ export const ROLE_PROFILES: Record<WorkspaceRole, RoleProfile> = {
       "summary:write",
       "alerts:read",
     ],
-    routes: ["/", "/alerts", "/findings", "/incidents", "/graph", "/postmortems"],
+    routes: ["/", "/alerts", "/findings", "/incidents", "/graph", "/postmortems", "/finops"],
   },
   incident_commander: {
     label: "Incident commander",
@@ -86,28 +86,28 @@ export const ROLE_PROFILES: Record<WorkspaceRole, RoleProfile> = {
       "summary:write",
       "alerts:read",
     ],
-    routes: ["/", "/alerts", "/findings", "/incidents", "/graph", "/postmortems"],
+    routes: ["/", "/alerts", "/findings", "/incidents", "/graph", "/postmortems", "/finops"],
   },
   analyst: {
     label: "Analyst",
     summary: "Focuses on evidence, correlations, and the shape of the story.",
     tone: "info",
     permissions: ["workspace:read", "telemetry:read", "analysis:read", "evidence:read", "summary:write", "alerts:read"],
-    routes: ["/", "/alerts", "/findings", "/graph", "/postmortems"],
+    routes: ["/", "/alerts", "/findings", "/graph", "/postmortems", "/finops"],
   },
   service_owner: {
     label: "Service owner",
     summary: "Tracks service impact and helps turn findings into action.",
     tone: "warning",
     permissions: ["workspace:read", "telemetry:read", "analysis:read", "evidence:read", "incident:read", "summary:write", "alerts:read"],
-    routes: ["/", "/alerts", "/findings", "/incidents", "/postmortems"],
+    routes: ["/", "/alerts", "/findings", "/incidents", "/postmortems", "/finops"],
   },
   viewer: {
     label: "Viewer",
     summary: "Read-only access for review, sharing, and oversight.",
     tone: "muted",
     permissions: ["workspace:read", "telemetry:read", "analysis:read", "evidence:read", "alerts:read"],
-    routes: ["/", "/alerts", "/findings"],
+    routes: ["/", "/alerts", "/findings", "/finops"],
   },
 };
 
@@ -127,6 +127,7 @@ export const DASHBOARD_ROUTES: Array<{ href: WorkspaceRoute; label: string }> = 
   { href: "/incidents", label: "Incidents" },
   { href: "/graph", label: "Graph" },
   { href: "/postmortems", label: "Postmortems" },
+  { href: "/finops", label: "FinOps" },
 ];
 
 export function isWorkspaceRole(value: string): value is WorkspaceRole {

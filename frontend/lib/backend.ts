@@ -2,6 +2,7 @@
 
 import { buildDemoInvestigationBundle } from "@/lib/demo-data";
 import { buildAlertsFeedFromBundle } from "@/lib/alerts";
+import { buildFinOpsInsightsFromBundle, normalizeBackendFinOpsInsights } from "@/lib/finops";
 import { createBackendAccessToken } from "@/lib/auth-server";
 import type { AuthSession } from "@/lib/auth";
 import { buildDashboardStats, buildDependencyGraph, buildPostmortemSummary } from "@/lib/insights";
@@ -15,6 +16,7 @@ import type {
   AnalysisIncident,
   BackendHealthResponse,
   BackendReadyResponse,
+  FinOpsInsights,
   InvestigationBundle,
   TelemetrySeverity,
   WorkspaceAlert,
@@ -56,6 +58,44 @@ interface BackendAlertsFeedResponse {
   copilot_prompt: string;
   slack_preview: string;
   alerts: BackendWorkspaceAlert[];
+}
+
+interface BackendFinOpsInsightsResponse {
+  mode: "live" | "demo";
+  generated_at: string;
+  source_label: string;
+  source_reason: string;
+  estimated_monthly_savings: number;
+  risk_score: number;
+  opportunity_count: number;
+  forecast_count: number;
+  opportunities: Array<{
+    kind: "rightsizing" | "idle_resource" | "efficiency" | "reliability";
+    scope_kind: "service" | "workload" | "cluster" | "namespace";
+    scope_name: string;
+    headline: string;
+    summary: string;
+    estimated_monthly_savings: number;
+    confidence: number;
+    risk_level: string;
+    evidence: string[];
+    recommendations: string[];
+    horizon_days: number;
+  }>;
+  forecasts: Array<{
+    kind: "storage" | "saturation" | "traffic" | "reliability";
+    scope_kind: "service" | "workload" | "cluster" | "namespace" | null;
+    scope_name: string | null;
+    headline: string;
+    summary: string;
+    horizon_days: number;
+    confidence: number;
+    risk_level: string;
+    evidence: string[];
+    recommendations: string[];
+  }>;
+  recommendations: string[];
+  top_scope: string | null;
 }
 
 async function fetchJson<T>(path: string, session: AuthSession | null): Promise<T> {
@@ -196,4 +236,14 @@ export async function loadAlertsFeed(session: AuthSession | null = null): Promis
 
   const bundle = await loadInvestigationBundle(session);
   return buildAlertsFeedFromBundle(bundle);
+}
+
+export async function loadFinOpsInsights(session: AuthSession | null = null): Promise<FinOpsInsights> {
+  const liveInsights = await fetchOptionalJson<BackendFinOpsInsightsResponse>("/api/v1/finops/insights?limit=100", session);
+  if (liveInsights) {
+    return normalizeBackendFinOpsInsights(liveInsights);
+  }
+
+  const bundle = await loadInvestigationBundle(session);
+  return buildFinOpsInsightsFromBundle(bundle);
 }

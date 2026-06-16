@@ -6,7 +6,7 @@ The platform turns telemetry into actionable findings, root-cause analysis, secu
 
 ## Current Focus
 
-Phase 1 is the telemetry foundation:
+The workspace now spans the full path from telemetry foundation to the final FinOps slice:
 
 - FastAPI backend with `GET /health` and `GET /ready`
 - OpenTelemetry-first tracing
@@ -15,7 +15,7 @@ Phase 1 is the telemetry foundation:
 - Adapter seams for future CloudWatch and OpenObserve work
 - Modular-monolith backend design so security and tenant policy stay centralized before any split is justified
 - Phase 1.5 security and governance hardening is underway with CORS, signed bearer auth, tenant-scoped persistence, redaction, Vault seams, and guardrail/evaluation seams
-- Phase 3 is starting to surface the investigation UX as a polished frontend console
+- Phase 5 is finalizing the workspace with FinOps and predictive reliability insights derived from the existing analysis store
 
 ## Repo Shape
 
