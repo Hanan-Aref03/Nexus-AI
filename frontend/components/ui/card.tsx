@@ -57,7 +57,7 @@ export function MetricCard({ label, value, detail, accent, trend, sparkline }: M
         </div>
         <div className="flex items-end justify-between gap-4">
           <div>
-            <div className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">{value}</div>
+            <div className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">{value}</div>
             <p className="mt-2 max-w-[28ch] text-sm leading-6 text-muted-foreground">{detail}</p>
           </div>
           <div className="flex h-16 items-end gap-1.5">

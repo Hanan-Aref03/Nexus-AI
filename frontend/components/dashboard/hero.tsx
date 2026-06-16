@@ -44,19 +44,17 @@ export function DashboardHero({
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.32em] text-muted-foreground">Workspace overview</p>
             <h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              See what changed, why it changed, and what needs attention next.
+              See what changed and what needs attention.
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground">
-              {sourceReason} The workspace keeps findings, incidents, health, and summary drafts in one place.
-            </p>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground">{sourceReason}</p>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button href="/incidents">Open incidents</Button>
+              <Button href="/incidents">Incidents</Button>
               <Button href="/findings" variant="secondary">
-                Review findings
+                Findings
               </Button>
               <Button href="/postmortems" variant="outline">
-                Draft summary
+                Summary
               </Button>
             </div>
           </div>

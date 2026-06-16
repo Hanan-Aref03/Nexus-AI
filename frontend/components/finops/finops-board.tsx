@@ -53,9 +53,9 @@ export function FinOpsBoard({ insights }: FinOpsBoardProps) {
       <div className="relative flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">Phase 5 - FinOps and predictive reliability</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Spend less, fail later, and keep the evidence visible.</h1>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Spend less and stay ahead of risk.</h1>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-muted-foreground">
-            The final workspace slice turns current findings and health scores into savings opportunities and conservative forecasts. No paid billing feed is required for this first cut.
+            Current findings and health scores become savings opportunities and conservative forecasts.
           </p>
         </div>
 
@@ -110,10 +110,8 @@ export function FinOpsBoard({ insights }: FinOpsBoardProps) {
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">Opportunity lane</p>
-                  <CardTitle className="mt-1">Where the workspace is leaking spend</CardTitle>
-                  <CardDescription className="mt-1 max-w-2xl">
-                    The first phase-5 cut prefers conservative estimates and easy-to-explain fixes over flashy billing guesses.
-                  </CardDescription>
+                  <CardTitle className="mt-1">Where spend is leaking</CardTitle>
+                  <CardDescription className="mt-1 max-w-2xl">Conservative estimates and easy-to-explain fixes only.</CardDescription>
                 </div>
                 <Badge tone="muted">{insights.topScope ?? "workspace"}</Badge>
               </div>
@@ -174,7 +172,7 @@ export function FinOpsBoard({ insights }: FinOpsBoardProps) {
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">Recommended next moves</p>
-                  <CardTitle className="mt-1">Keep the fix list short and the payoff obvious</CardTitle>
+                  <CardTitle className="mt-1">Keep the fix list short</CardTitle>
                 </div>
                 <Badge tone={insights.mode === "live" ? "success" : "warning"}>{insights.sourceLabel}</Badge>
               </div>
@@ -203,9 +201,7 @@ export function FinOpsBoard({ insights }: FinOpsBoardProps) {
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">Forecast lane</p>
                   <CardTitle className="mt-1">What might need attention next</CardTitle>
-                  <CardDescription className="mt-1 max-w-2xl">
-                    The right-hand lens can switch between savings and reliability to keep the phase easy to inspect.
-                  </CardDescription>
+                  <CardDescription className="mt-1 max-w-2xl">Switch between savings and reliability.</CardDescription>
                 </div>
                 <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 p-1">
                   <button

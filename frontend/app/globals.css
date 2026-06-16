@@ -34,6 +34,24 @@
 
 html[data-surface="light"] {
   color-scheme: light;
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 174 79% 40%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 214 32% 91%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 214 32% 91%;
+  --muted-foreground: 215 16% 45%;
+  --accent: 48 96% 53%;
+  --accent-foreground: 222 47% 11%;
+  --border: 214 32% 86%;
+  --ring: 174 79% 45%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
   --shell-background-start: 248 250 252;
   --shell-background-end: 236 242 255;
   --shell-halo-left: 99 102 241;
