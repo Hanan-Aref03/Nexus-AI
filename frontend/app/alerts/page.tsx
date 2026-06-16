@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { AlertsBoard } from "@/components/alerts/alerts-board";
+import { CopilotStudio } from "@/components/copilot/copilot-studio";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, MetricCard } from "@/components/ui/card";
 import { formatDateTime } from "@/lib/format";
@@ -65,6 +66,8 @@ export default async function AlertsPage() {
           sparkline={[32, 36, 42, 46, 50, 54, 58, 62]}
         />
       </section>
+
+      <CopilotStudio feed={feed} />
 
       <AlertsBoard feed={feed} />
     </div>

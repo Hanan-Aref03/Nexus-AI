@@ -27,4 +27,10 @@ The Phase 4 alert inbox is intentionally read-only in its first PR:
 - `app/domains/alerts/` derives alerts from the existing analysis records
 - `app/api/v1/alerts.py` exposes the first alert feed endpoint
 - no new alert table or migration is required yet
-- Slack now flows through a local connector seam, while copilot stays preview-only until the provider seam is added
+- Slack now flows through a local connector seam, while copilot surfaces through an interactive provider chain in the alerts UI
+
+## Copilot Slice
+
+- `app/domains/copilot/` turns the current tenant's alert state into a grounded question-answer flow
+- `app/integrations/copilot/` routes Gemini first, Grok second, and a local fallback last
+- guardrails and local evaluation run before answers reach the UI so prompt safety and answer quality stay visible
