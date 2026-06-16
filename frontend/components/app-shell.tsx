@@ -1,7 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { CSSProperties, PointerEvent as ReactPointerEvent, ReactNode } from "react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,17 +12,117 @@ import { Button } from "@/components/ui/button";
 import { getAccessibleRoutes, getRoleProfile, type AuthSession } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
+type SurfaceMode = "dark" | "light";
+
+const SURFACE_STORAGE_KEY = "nexusai-surface-mode";
+
 interface AppShellProps {
   children: ReactNode;
   session: AuthSession | null;
 }
 
+function SurfaceToggle({
+  mode,
+  onChange,
+}: {
+  mode: SurfaceMode;
+  onChange: (nextMode: SurfaceMode) => void;
+}) {
+  const shellClasses =
+    mode === "light"
+      ? "border-slate-200/80 bg-white/80 text-slate-900 shadow-[0_10px_30px_rgba(15,23,42,0.08)]"
+      : "border-border/70 bg-background/80 text-foreground shadow-sm";
+  const inactiveButtonClasses =
+    mode === "light" ? "text-slate-500 hover:text-slate-900" : "text-muted-foreground hover:text-foreground";
+
+  return (
+    <div className={cn("inline-flex items-center gap-1 rounded-full p-1 backdrop-blur", shellClasses)}>
+      <button
+        type="button"
+        aria-pressed={mode === "dark"}
+        onClick={() => onChange("dark")}
+        className={cn(
+          "rounded-full px-3 py-2 text-xs font-semibold transition",
+          mode === "dark" ? "bg-primary text-primary-foreground" : inactiveButtonClasses,
+        )}
+      >
+        Dark
+      </button>
+      <button
+        type="button"
+        aria-pressed={mode === "light"}
+        onClick={() => onChange("light")}
+        className={cn(
+          "rounded-full px-3 py-2 text-xs font-semibold transition",
+          mode === "light" ? "bg-primary text-primary-foreground" : inactiveButtonClasses,
+        )}
+      >
+        Light
+      </button>
+    </div>
+  );
+}
+
+function getPointerStyle(): CSSProperties {
+  return {
+    "--pointer-x": "50vw",
+    "--pointer-y": "18vh",
+  } as CSSProperties;
+}
+
 export function AppShell({ children, session }: AppShellProps) {
   const pathname = usePathname();
+  const shellRef = useRef<HTMLDivElement | null>(null);
+  const [surfaceMode, setSurfaceMode] = useState<SurfaceMode>("dark");
   const [loggingOut, setLoggingOut] = useState(false);
   const authRoute = pathname.startsWith("/login") || pathname.startsWith("/signup");
   const visibleNavigation = getAccessibleRoutes(session?.role);
   const roleProfile = session ? getRoleProfile(session.role) : null;
+
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(SURFACE_STORAGE_KEY);
+      if (stored === "dark" || stored === "light") {
+        setSurfaceMode(stored);
+      } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+        setSurfaceMode("light");
+      }
+    } catch {
+      setSurfaceMode("dark");
+    }
+  }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.surface = surfaceMode;
+    root.style.colorScheme = surfaceMode;
+
+    try {
+      window.localStorage.setItem(SURFACE_STORAGE_KEY, surfaceMode);
+    } catch {
+      // Ignore storage failures in locked-down environments.
+    }
+  }, [surfaceMode]);
+
+  function updatePointerPosition(event: ReactPointerEvent<HTMLDivElement>) {
+    const shell = shellRef.current;
+    if (!shell) {
+      return;
+    }
+
+    shell.style.setProperty("--pointer-x", `${event.clientX}px`);
+    shell.style.setProperty("--pointer-y", `${event.clientY}px`);
+  }
+
+  function resetPointerPosition() {
+    const shell = shellRef.current;
+    if (!shell) {
+      return;
+    }
+
+    shell.style.setProperty("--pointer-x", "50vw");
+    shell.style.setProperty("--pointer-y", "18vh");
+  }
 
   async function handleLogout() {
     setLoggingOut(true);
@@ -36,12 +136,24 @@ export function AppShell({ children, session }: AppShellProps) {
 
   if (authRoute) {
     return (
-      <div className="dashboard-shell relative min-h-screen overflow-hidden bg-grid-radial">
+      <div
+        ref={shellRef}
+        data-surface={surfaceMode}
+        onPointerMove={updatePointerPosition}
+        onPointerLeave={resetPointerPosition}
+        className="dashboard-shell relative min-h-screen overflow-hidden"
+        style={getPointerStyle()}
+      >
+        <div className="workspace-grid pointer-events-none absolute inset-0" />
+        <div className="workspace-glow pointer-events-none absolute inset-0" />
         <div className="noise-overlay pointer-events-none absolute inset-0" />
         <div className="relative mx-auto grid min-h-screen w-full max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[0.95fr,1.05fr] lg:px-8">
           <aside className="hidden flex-col justify-between rounded-[2.25rem] border border-white/8 bg-black/30 p-8 backdrop-blur-xl lg:flex">
             <div>
-              <BrandMark />
+              <div className="flex items-start justify-between gap-4">
+                <BrandMark />
+                <SurfaceToggle mode={surfaceMode} onChange={setSurfaceMode} />
+              </div>
               <p className="mt-8 text-xs uppercase tracking-[0.24em] text-muted-foreground">Workspace access</p>
               <h1 className="mt-3 max-w-md text-3xl font-semibold tracking-tight text-white">
                 Keep each tenant separate and every role easy to understand.
@@ -74,7 +186,16 @@ export function AppShell({ children, session }: AppShellProps) {
   }
 
   return (
-    <div className="dashboard-shell relative min-h-screen overflow-hidden bg-grid-radial">
+    <div
+      ref={shellRef}
+      data-surface={surfaceMode}
+      onPointerMove={updatePointerPosition}
+      onPointerLeave={resetPointerPosition}
+      className="dashboard-shell relative min-h-screen overflow-hidden"
+      style={getPointerStyle()}
+    >
+      <div className="workspace-grid pointer-events-none absolute inset-0" />
+      <div className="workspace-glow pointer-events-none absolute inset-0" />
       <div className="noise-overlay pointer-events-none absolute inset-0" />
       <div className="relative flex min-h-screen">
         <aside className="hidden w-[280px] shrink-0 border-r border-white/8 bg-black/20 px-5 py-6 backdrop-blur-xl lg:flex lg:flex-col">
@@ -146,6 +267,9 @@ export function AppShell({ children, session }: AppShellProps) {
               </div>
 
               <div className="flex items-center gap-2">
+                <div className="hidden sm:block">
+                  <SurfaceToggle mode={surfaceMode} onChange={setSurfaceMode} />
+                </div>
                 {session ? (
                   <>
                     <Badge tone="info">{session.tenantName}</Badge>
