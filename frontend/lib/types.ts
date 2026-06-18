@@ -229,6 +229,51 @@ export interface CopilotAnswer {
   topAlertSeverity: string | null;
 }
 
+export type FinOpsOpportunityKind = "rightsizing" | "idle_resource" | "efficiency" | "reliability";
+export type FinOpsForecastKind = "storage" | "saturation" | "traffic" | "reliability";
+
+export interface FinOpsOpportunity {
+  kind: FinOpsOpportunityKind;
+  scopeKind: AnalysisScopeKind;
+  scopeName: string;
+  headline: string;
+  summary: string;
+  estimatedMonthlySavings: number;
+  confidence: number;
+  riskLevel: string;
+  evidence: string[];
+  recommendations: string[];
+  horizonDays: number;
+}
+
+export interface FinOpsForecast {
+  kind: FinOpsForecastKind;
+  scopeKind: AnalysisScopeKind | null;
+  scopeName: string | null;
+  headline: string;
+  summary: string;
+  horizonDays: number;
+  confidence: number;
+  riskLevel: string;
+  evidence: string[];
+  recommendations: string[];
+}
+
+export interface FinOpsInsights {
+  mode: BackendMode;
+  generatedAt: string;
+  sourceLabel: string;
+  sourceReason: string;
+  estimatedMonthlySavings: number;
+  riskScore: number;
+  opportunityCount: number;
+  forecastCount: number;
+  opportunities: FinOpsOpportunity[];
+  forecasts: FinOpsForecast[];
+  recommendations: string[];
+  topScope: string | null;
+}
+
 export interface InvestigationBundle {
   mode: BackendMode;
   generatedAt: string;

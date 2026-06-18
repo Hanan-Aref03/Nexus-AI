@@ -19,16 +19,14 @@ export default async function AlertsPage() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">Alerts and copilot</p>
-              <CardTitle>One queue for what matters now</CardTitle>
+              <CardTitle>One queue for urgent work</CardTitle>
             </div>
             <div className="flex flex-wrap gap-2">
               <Badge tone={feed.mode === "live" ? "success" : "warning"}>{feed.mode === "live" ? "Live feed" : "Sample feed"}</Badge>
               <Badge tone="info">Generated {formatDateTime(feed.generatedAt)}</Badge>
             </div>
           </div>
-          <p className="text-sm leading-6 text-muted-foreground">
-            Keep the operational signal focused: important incidents, health degradations, and the next question a responder should ask.
-          </p>
+          <p className="text-sm leading-6 text-muted-foreground">Keep the feed focused on incidents, health, and the next question to ask.</p>
         </CardHeader>
       </Card>
 

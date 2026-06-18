@@ -39,6 +39,12 @@ FastAPI service for telemetry ingestion, analysis, incident handling, and extern
 - `/api/v1/copilot/query` grounds answers in the current tenant evidence and prefers Gemini, then Grok, then a local fallback
 - No extra migration was needed for this slice because the feed is computed from existing analysis records
 
+## Phase 5 Highlights
+
+- `GET /api/v1/finops/insights` derives conservative savings estimates and reliability forecasts from the existing analysis store
+- The frontend `app/finops/page.tsx` turns those insights into the final workspace lens
+- No new migration was needed because the phase intentionally stays computed from current findings and health scores
+
 ## Local Run
 
 From the `backend/` directory:

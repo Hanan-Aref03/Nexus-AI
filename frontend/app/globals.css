@@ -21,6 +21,50 @@
   --ring: 174 79% 53%;
   --destructive: 0 72% 55%;
   --destructive-foreground: 0 0% 100%;
+  --shell-background-start: 7 11 20;
+  --shell-background-end: 4 8 14;
+  --shell-halo-left: 45 212 191;
+  --shell-halo-right: 59 130 246;
+  --shell-grid-rgb: 255 255 255;
+  --shell-grid-opacity: 0.045;
+  --shell-noise-rgb: 255 255 255;
+  --shell-noise-opacity: 0.08;
+  --shell-glow-opacity: 0.16;
+}
+
+html[data-surface="light"] {
+  color-scheme: light;
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 174 79% 40%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 214 32% 91%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 214 32% 91%;
+  --muted-foreground: 215 16% 45%;
+  --accent: 48 96% 53%;
+  --accent-foreground: 222 47% 11%;
+  --border: 214 32% 86%;
+  --ring: 174 79% 45%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --shell-background-start: 248 250 252;
+  --shell-background-end: 236 242 255;
+  --shell-halo-left: 99 102 241;
+  --shell-halo-right: 45 212 191;
+  --shell-grid-rgb: 15 23 42;
+  --shell-grid-opacity: 0.075;
+  --shell-noise-rgb: 15 23 42;
+  --shell-noise-opacity: 0.045;
+  --shell-glow-opacity: 0.12;
+}
+
+html[data-surface="dark"] {
+  color-scheme: dark;
 }
 
 * {
@@ -36,9 +80,13 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(45, 212, 191, 0.12), transparent 24%),
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent 26%),
-    linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--background)) 100%);
+    radial-gradient(circle at top left, rgb(var(--shell-halo-left) / 0.12), transparent 24%),
+    radial-gradient(circle at top right, rgb(var(--shell-halo-right) / 0.1), transparent 26%),
+    linear-gradient(
+      180deg,
+      rgb(var(--shell-background-start) / 1) 0%,
+      rgb(var(--shell-background-end) / 1) 100%
+    );
   color: hsl(var(--foreground));
   font-family: "Aptos", "Segoe UI", sans-serif;
 }
@@ -54,14 +102,42 @@ a {
 }
 
 .dashboard-shell {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 42px 42px;
+  background:
+    radial-gradient(circle at top left, rgb(var(--shell-halo-left) / 0.14), transparent 22%),
+    radial-gradient(circle at top right, rgb(var(--shell-halo-right) / 0.11), transparent 24%),
+    linear-gradient(
+      180deg,
+      rgb(var(--shell-background-start) / 0.94) 0%,
+      rgb(var(--shell-background-end) / 0.98) 100%
+    );
+}
+
+.workspace-grid {
+  background-image:
+    linear-gradient(rgb(var(--shell-grid-rgb) / var(--shell-grid-opacity)) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--shell-grid-rgb) / var(--shell-grid-opacity)) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(
+    circle 360px at var(--pointer-x, 50vw) var(--pointer-y, 18vh),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.84) 42%,
+    rgba(0, 0, 0, 0.14) 74%,
+    transparent 100%
+  );
+}
+
+.workspace-glow {
+  background: radial-gradient(
+    circle 280px at var(--pointer-x, 50vw) var(--pointer-y, 18vh),
+    rgb(var(--shell-halo-left) / var(--shell-glow-opacity)) 0%,
+    transparent 62%
+  );
+  mix-blend-mode: screen;
 }
 
 .noise-overlay {
   background-image:
-    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.08) 1px, transparent 0);
+    radial-gradient(circle at 1px 1px, rgb(var(--shell-noise-rgb) / var(--shell-noise-opacity)) 1px, transparent 0);
   background-size: 24px 24px;
   mix-blend-mode: soft-light;
   opacity: 0.22;

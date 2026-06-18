@@ -11,6 +11,7 @@ Expected early routes include:
 - incidents
 - impact map
 - summary draft
+- finops and predictive reliability
 
 Keep the route layer thin and push business-specific behavior into feature modules.
 
@@ -25,3 +26,4 @@ Keep the route layer thin and push business-specific behavior into feature modul
 - `app/incidents/[incidentId]/page.tsx` - incident deep dive
 - `app/graph/page.tsx` - impact map
 - `app/postmortems/page.tsx` - summary drafting surface
+- `app/finops/page.tsx` - cost and predictive reliability lens

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import type { ReactNode } from "react";
 
 import { AppShell } from "@/components/app-shell";
 import { getCurrentSession } from "@/lib/session";
+import { buildSurfaceBootstrapScript } from "@/lib/theme";
 
 import "./globals.css";
 
@@ -22,7 +24,12 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await getCurrentSession();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script id="surface-bootstrap" strategy="beforeInteractive">
+          {buildSurfaceBootstrapScript()}
+        </Script>
+      </head>
       <body>
         <AppShell session={session}>{children}</AppShell>
       </body>

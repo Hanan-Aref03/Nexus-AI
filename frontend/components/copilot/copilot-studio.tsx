@@ -156,7 +156,7 @@ export function CopilotStudio({ feed }: CopilotStudioProps) {
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[hsl(var(--copilot-muted))]">Copilot studio</p>
               <h2 className="mt-2 text-3xl font-semibold tracking-tight">Ask the workspace what it knows.</h2>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-[hsl(var(--copilot-muted))]">
-                The copilot stays grounded in the current tenant's evidence, keeps guardrails on the prompt path, and can switch surfaces between a deep-night control room and a clean paper briefing.
+                The copilot stays grounded in the current tenant's evidence and supports both a dark control room and a lighter briefing view.
               </p>
             </div>
 
@@ -226,7 +226,7 @@ export function CopilotStudio({ feed }: CopilotStudioProps) {
                   {isAsking ? "Thinking..." : "Ask"}
                 </button>
                 <div className="rounded-2xl border border-[hsl(var(--copilot-border))] px-4 py-3 text-xs leading-6 text-[hsl(var(--copilot-muted))]">
-                  Gemini first, Grok second, local fallback last.
+                  Gemini first. Grok second. Local last.
                 </div>
               </div>
             </div>
@@ -305,14 +305,14 @@ export function CopilotStudio({ feed }: CopilotStudioProps) {
         </div>
 
         <div className="space-y-4">
-          <div className="rounded-[1.75rem] border border-[hsl(var(--copilot-border))] bg-[hsl(var(--copilot-panel))] p-5">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[hsl(var(--copilot-muted))]">Simulation</p>
-                <h3 className="mt-2 text-xl font-semibold">Antigravity signal room</h3>
-              </div>
-              <span className="rounded-full border border-[hsl(var(--copilot-border))] px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--copilot-muted))]">
-                {feed.summary.total} alerts
+            <div className="rounded-[1.75rem] border border-[hsl(var(--copilot-border))] bg-[hsl(var(--copilot-panel))] p-5">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[hsl(var(--copilot-muted))]">Simulation</p>
+                  <h3 className="mt-2 text-xl font-semibold">Signal room</h3>
+                </div>
+                <span className="rounded-full border border-[hsl(var(--copilot-border))] px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[hsl(var(--copilot-muted))]">
+                  {feed.summary.total} alerts
               </span>
             </div>
 

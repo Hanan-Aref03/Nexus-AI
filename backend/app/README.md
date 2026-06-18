@@ -34,3 +34,9 @@ The Phase 4 alert inbox is intentionally read-only in its first PR:
 - `app/domains/copilot/` turns the current tenant's alert state into a grounded question-answer flow
 - `app/integrations/copilot/` routes Gemini first, Grok second, and a local fallback last
 - guardrails and local evaluation run before answers reach the UI so prompt safety and answer quality stay visible
+
+## FinOps Slice
+
+- `app/domains/finops/` turns the current analysis store into conservative savings and forecasting guidance
+- `app/api/v1/finops.py` exposes `/api/v1/finops/insights` as the final workspace lens
+- no new storage table or migration is required because the phase derives from existing findings and health scores
